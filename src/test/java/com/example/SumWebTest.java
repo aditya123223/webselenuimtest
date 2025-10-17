@@ -1,5 +1,6 @@
 package com.example;
 
+import org.openqa.selenium.edge.EdgeDriver;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -23,7 +24,9 @@ public class SumWebTest {
         ChromeOptions options = new ChromeOptions();
         options.addArguments("--headless=new"); // Headless mode for Jenkins
         options.addArguments("--allow-file-access-from-files"); // Access local HTML
-        driver = new ChromeDriver(options);
+        System.setProperty("webdriver.edge.driver", "C:\\WebDrivers\\msedgedriver.exe");
+WebDriver driver = new EdgeDriver();
+
     }
 
     @Test
