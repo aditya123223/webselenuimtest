@@ -1,6 +1,7 @@
 package com.example;
 
 import org.openqa.selenium.edge.EdgeDriver;
+import org.openqa.selenium.edge.EdgeOptions;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -9,8 +10,6 @@ import static org.junit.Assert.assertEquals;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import java.time.Duration;
@@ -21,12 +20,14 @@ public class SumWebTest {
 
     @Before
     public void setUp() {
-        ChromeOptions options = new ChromeOptions();
-        options.addArguments("--headless=new"); // Headless mode for Jenkins
-        options.addArguments("--allow-file-access-from-files"); // Access local HTML
-        System.setProperty("webdriver.edge.driver", "C:\\WebDrivers\\msedgedriver.exe");
-WebDriver driver = new EdgeDriver();
+        // Use Edge in headless mode for Jenkins
+        EdgeOptions options = new EdgeOptions();
+        options.addArguments("--headless=new");
+        options.addArguments("--allow-file-access-from-files");
 
+        // ❌ No need for System.setProperty
+        // ✅ Selenium Manager will auto-manage the driver
+        driver = new EdgeDriver(options);
     }
 
     @Test
@@ -46,7 +47,7 @@ WebDriver driver = new EdgeDriver();
         num2.sendKeys("20");
         calcBtn.click();
 
-        Thread.sleep(1000); // wait for JS to update
+        Thread.sleep(1000); // wait for JS to update result
 
         String output = result.getText().trim();
         System.out.println("Output: " + output);
@@ -55,6 +56,9 @@ WebDriver driver = new EdgeDriver();
 
     @After
     public void tearDown() {
-        if (driver != null) driver.quit();
+        if (driver != null) {
+            driver.quit();
+        }
     }
 }
+
