@@ -8,13 +8,14 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import java.time.Duration;
+import static org.junit.Assert.*;
 
 public class SumWebTest {
     private WebDriver driver;
-
+    
     @Before
     public void setUp() {
-        WebDriverManager.chromedriver().setup();
+        WebDriverManager.chromedriver().clearDriverCache().setup();
         
         ChromeOptions options = new ChromeOptions();
         options.addArguments("--headless=new");
@@ -26,21 +27,27 @@ public class SumWebTest {
         options.addArguments("--disable-extensions");
         options.addArguments("--disable-software-rasterizer");
         
-        // Set user data directory to avoid permission issues
         String userDataDir = System.getProperty("java.io.tmpdir") + "chrome-test-" + System.currentTimeMillis();
         options.addArguments("--user-data-dir=" + userDataDir);
         
         driver = new ChromeDriver(options);
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
     }
-
+    
     @Test
     public void testSum() {
-        // Your test code here
-        driver.get("your-url");
-        // ... rest of your test
+        // Test with Google homepage
+        driver.get("https://www.google.com");
+        
+        String title = driver.getTitle();
+        System.out.println("Page title: " + title);
+        
+        assertNotNull("Title should not be null", title);
+        assertTrue("Title should contain Google", title.contains("Google"));
+        
+        System.out.println("Test passed successfully!");
     }
-
+    
     @After
     public void tearDown() {
         if (driver != null) {
