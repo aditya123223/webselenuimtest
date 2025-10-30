@@ -18,25 +18,31 @@ public class SumWebTest {
 
     private WebDriver driver;
 
+    
     @Before
-    public void setUp() {
-        // ✅ Specify exact EdgeDriver path for Jenkins
-        System.setProperty("webdriver.edge.driver", "C:\\WebDrivers\\msedgedriver.exe");
+public void setUp() {
+    // Explicitly set EdgeDriver path
+    System.setProperty("webdriver.edge.driver", "C:\\WebDrivers\\msedgedriver.exe");
 
-        EdgeOptions options = new EdgeOptions();
+    EdgeOptions options = new EdgeOptions();
 
-        // ✅ Essential headless + Jenkins-safe arguments
-        options.addArguments("--headless");
-        options.addArguments("--disable-gpu");
-        options.addArguments("--no-sandbox");
-        options.addArguments("--disable-dev-shm-usage");
-        options.addArguments("--remote-allow-origins=*");
-        options.addArguments("--window-size=1920,1080");
-        options.addArguments("--disable-extensions");
-        options.addArguments("--disable-infobars");
+    // Force Edge to use 64-bit installation path
+    options.setBinary("C:\\Program Files\\Microsoft\\Edge\\Application\\msedge.exe");
 
-        driver = new EdgeDriver(options);
-    }
+    // Safe Jenkins headless flags
+    options.addArguments("--headless=new");
+    options.addArguments("--disable-gpu");
+    options.addArguments("--no-sandbox");
+    options.addArguments("--disable-dev-shm-usage");
+    options.addArguments("--remote-allow-origins=*");
+    options.addArguments("--window-size=1920,1080");
+    options.addArguments("--disable-extensions");
+    options.addArguments("--disable-infobars");
+    options.addArguments("--disable-software-rasterizer");
+
+    driver = new EdgeDriver(options);
+}
+
 
     @Test
     public void testSum() throws InterruptedException {
