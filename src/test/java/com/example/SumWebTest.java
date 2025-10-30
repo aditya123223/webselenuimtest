@@ -25,8 +25,7 @@ public class SumWebTest {
         options.addArguments("--headless=new");
         options.addArguments("--allow-file-access-from-files");
 
-        // ❌ No need for System.setProperty
-        // ✅ Selenium Manager will auto-manage the driver
+      
         driver = new EdgeDriver(options);
     }
 
