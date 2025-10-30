@@ -20,40 +20,52 @@ public class SumWebTest {
 
     @Before
     public void setUp() {
-        // ✅ Tell Selenium where the EdgeDriver is located
+        // ✅ Specify exact EdgeDriver path for Jenkins
         System.setProperty("webdriver.edge.driver", "C:\\WebDrivers\\msedgedriver.exe");
 
-        // Use Edge in headless mode for Jenkins
         EdgeOptions options = new EdgeOptions();
-        options.addArguments("--headless=new");
-        options.addArguments("--allow-file-access-from-files");
-        options.addArguments("--remote-allow-origins=*"); // Helps avoid connection issues in Jenkins
+
+        // ✅ Essential headless + Jenkins-safe arguments
+        options.addArguments("--headless");
+        options.addArguments("--disable-gpu");
+        options.addArguments("--no-sandbox");
+        options.addArguments("--disable-dev-shm-usage");
+        options.addArguments("--remote-allow-origins=*");
+        options.addArguments("--window-size=1920,1080");
+        options.addArguments("--disable-extensions");
+        options.addArguments("--disable-infobars");
 
         driver = new EdgeDriver(options);
     }
 
     @Test
     public void testSum() throws InterruptedException {
-        // Path to your HTML file in Jenkins workspace
+        // ✅ Use full path to your HTML file inside Jenkins workspace
         String url = "file:///C:/ProgramData/Jenkins/.jenkins/workspace/SeleniumWebSumTest/src/test/resources/sum.html";
         driver.get(url);
 
+        // Wait for elements to appear
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
         wait.until(ExpectedConditions.presenceOfElementLocated(By.id("num1")));
 
+        // Locate elements
         WebElement num1 = driver.findElement(By.id("num1"));
         WebElement num2 = driver.findElement(By.id("num2"));
         WebElement calcBtn = driver.findElement(By.id("calcBtn"));
         WebElement result = driver.findElement(By.id("result"));
 
+        // Enter values and click
         num1.sendKeys("10");
         num2.sendKeys("20");
         calcBtn.click();
 
-        Thread.sleep(1000); // wait for JS to update result
+        // Wait for JS update
+        Thread.sleep(1000);
 
         String output = result.getText().trim();
         System.out.println("Output: " + output);
+
+        // Verify result
         assertEquals("Sum = 30", output);
     }
 
