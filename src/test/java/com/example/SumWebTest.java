@@ -20,17 +20,21 @@ public class SumWebTest {
 
     @Before
     public void setUp() {
+        // ✅ Tell Selenium where the EdgeDriver is located
+        System.setProperty("webdriver.edge.driver", "C:\\WebDrivers\\msedgedriver.exe");
+
         // Use Edge in headless mode for Jenkins
         EdgeOptions options = new EdgeOptions();
         options.addArguments("--headless=new");
         options.addArguments("--allow-file-access-from-files");
+        options.addArguments("--remote-allow-origins=*"); // Helps avoid connection issues in Jenkins
 
-      
         driver = new EdgeDriver(options);
     }
 
     @Test
     public void testSum() throws InterruptedException {
+        // Path to your HTML file in Jenkins workspace
         String url = "file:///C:/ProgramData/Jenkins/.jenkins/workspace/SeleniumWebSumTest/src/test/resources/sum.html";
         driver.get(url);
 
